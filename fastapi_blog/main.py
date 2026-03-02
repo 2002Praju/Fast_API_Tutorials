@@ -1,8 +1,8 @@
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse 
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates 
 
 app = FastAPI()
-
 
 
 posts: list[dict] = [
@@ -23,9 +23,10 @@ posts: list[dict] = [
 ]
 
 
-@app.get("/", response_class= HTMLResponse)
+@app.get("/", response_class= HTMLResponse, include_in_schema=False)    # include_in_schema=False is used to hide this endpoint from the docu
+@app.get("/posts", response_class= HTMLResponse, include_in_schema=False)
 def home():
-    return f"<h1>{posts[0]["title"]}</h1>"
+    return f"<h1>{posts[0]['title']}</h1>"
 
 @app.get("/api/posts")
 def get_posts():
